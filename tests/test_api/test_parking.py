@@ -1,5 +1,7 @@
 import pytest
+
 from app.models import Client, Parking, ClientParking
+
 
 @pytest.mark.parametrize("endpoint", [
     "/clients",

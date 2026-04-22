@@ -1,7 +1,7 @@
 import pytest
+
 from app import create_app, db
 from app.models import Client, Parking, ClientParking
-from datetime import datetime
 
 
 @pytest.fixture(scope="session")

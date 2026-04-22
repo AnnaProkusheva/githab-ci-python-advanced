@@ -2,9 +2,9 @@ import factory
 import pytest
 from factory.alchemy import SQLAlchemyModelFactory
 from faker import Faker
-from app.models import Client, Parking
+
 from app import db
-from functools import partial
+from app.models import Client, Parking
 
 fake = Faker('ru_RU')
 
