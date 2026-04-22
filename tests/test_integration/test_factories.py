@@ -17,9 +17,11 @@ class ClientFactory(SQLAlchemyModelFactory):
     name = factory.Faker("first_name_female")
     surname = factory.Faker("last_name_female")
     credit_card = factory.LazyFunction(
-        lambda: fake.credit_card_number()
-        if fake.boolean(chance_of_getting_true=70)
-        else None
+        lambda: (
+            fake.credit_card_number()
+            if fake.boolean(chance_of_getting_true=70)
+            else None
+        )
     )
     car_number = factory.Faker("license_plate")
 
