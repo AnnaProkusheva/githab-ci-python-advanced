@@ -1,12 +1,12 @@
 import pytest
 
 from app import create_app, db
-from app.models import Client, Parking, ClientParking
+from app.models import Client, ClientParking, Parking
 
 
 @pytest.fixture(scope="session")
 def app():
-    app = create_app('test')
+    app = create_app("test")
     with app.app_context():
         db.create_all()
         yield app
@@ -27,7 +27,12 @@ def db_session(app):
 @pytest.fixture
 def sample_data(db_session):
     client = Client(name="Иван", surname="Иванов", credit_card="1234-5678")
-    parking = Parking(address="ул. Ленина 1", opened=True, count_places=10, count_available_places=5)
+    parking = Parking(
+        address="ул. Ленина 1",
+        opened=True,
+        count_places=10,
+        count_available_places=5,
+    )
 
     db.session.add(client)
     db.session.add(parking)
