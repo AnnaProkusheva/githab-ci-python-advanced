@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 
 from flask import Blueprint, request, jsonify
 
@@ -104,7 +104,7 @@ def client_leave_parking():
     if session.time_out:
         return jsonify({'error': 'Client already left'}), 400
 
-    session.time_out = datetime.utcnow()
+    session.time_out = datetime.datetime.utcnow()
     session.parking.count_available_places += 1
     db.session.commit()
 
