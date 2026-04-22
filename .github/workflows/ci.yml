@@ -26,9 +26,7 @@ jobs:
           pip install pytest-cov
 
       - name: Check imports
-        run: -- isort 
-            --check-only 
-            --settings-path pyproject.toml .
+        run: isort --check-only --settings-path pyproject.toml .
 
       - name: Check formatting
         run: black --check .
