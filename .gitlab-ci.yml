@@ -4,14 +4,6 @@ stages:
 
 image: python:3.12-slim
 
-variables:
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-
-cache:
-  key: "$CI_COMMIT_REF_SLUG"
-  paths:
-    - .cache/pip/
-
 before_script:
   - python --version
   - pip install --upgrade pip
@@ -30,8 +22,3 @@ tests:
   stage: test
   script:
     - pytest --cov=app --cov-report=xml:coverage.xml
-  artifacts:
-    reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: coverage.xml
