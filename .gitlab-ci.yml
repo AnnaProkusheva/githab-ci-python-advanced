@@ -2,27 +2,21 @@ stages:
   - lint
   - test
 
+image: python:3.12-slim
+
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
 cache:
-  key: ${CI_COMMIT_REF_SLUG}
+  key: "$CI_COMMIT_REF_SLUG"
   paths:
     - .cache/pip/
-    - .venv/
-
-image: python:3.12-slim
 
 before_script:
-  - apt-get update -qq && apt-get install -y git
-  - python -m venv .venv
-  - .venv/bin/activate
+  - python --version
   - pip install --upgrade pip
-  - pip install -r requirements.txt -r requirements-dev.txt
-
-.rules: &rules
-  - if: $CI_PIPELINE_SOURCE == "push"
-  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  - pip install -r requirements.txt
+  - pip install pytest-cov
 
 lint:
   stage: lint
@@ -31,16 +25,13 @@ lint:
     - black --check .
     - flake8 .
     - mypy .
-  rules: *rules
 
 tests:
   stage: test
   script:
-    - pytest tests/ -v --cov=app --cov-report=xml:coverage.xml --junitxml=pytest.xml
+    - pytest --cov=app --cov-report=xml:coverage.xml
   artifacts:
     reports:
-      junit: pytest.xml
       coverage_report:
         coverage_format: cobertura
         path: coverage.xml
-  rules: *rules
