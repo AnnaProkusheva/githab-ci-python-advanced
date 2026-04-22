@@ -3,7 +3,7 @@ from datetime import datetime
 from app import db
 
 
-class Client(db.Model):
+class Client(db.Model): # type: ignore[misc]
     __tablename__ = "client"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -15,7 +15,7 @@ class Client(db.Model):
     parking_sessions = db.relationship("ClientParking", backref="client", lazy=True)
 
 
-class Parking(db.Model):
+class Parking(db.Model): # type: ignore[misc]
     __tablename__ = "parking"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -27,7 +27,7 @@ class Parking(db.Model):
     parking_sessions = db.relationship("ClientParking", backref="parking", lazy=True)
 
 
-class ClientParking(db.Model):
+class ClientParking(db.Model): # type: ignore[misc]
     __tablename__ = "client_parking"
 
     id = db.Column(db.Integer, primary_key=True)

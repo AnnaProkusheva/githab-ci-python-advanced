@@ -1,1 +1,1 @@
-pytest_plugins = []
+pytest_plugins: list[str] = []
