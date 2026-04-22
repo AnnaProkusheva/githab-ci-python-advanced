@@ -18,7 +18,7 @@ def create_app(config_name="development", Client=None):
     db.init_app(app)
 
     with app.app_context():
-        from app.models import Client, Parking, ClientParking
+        from app.models import Client, ClientParking, Parking
 
         db.create_all()
 
