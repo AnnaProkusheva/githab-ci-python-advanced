@@ -90,7 +90,7 @@ def client_enter_parking():
     if "client_id" not in data or "parking_id" not in data:
         return jsonify({"error": "Missing client_id or parking_id"}), 400
 
-    client = Client.query.get_or_404(data["client_id"])
+    Client.query.get_or_404(data["client_id"])
     parking = Parking.query.get_or_404(data["parking_id"])
 
     if not parking.opened:
