@@ -9,16 +9,20 @@ cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
     - .cache/pip/
-    - venv/
+    - .venv/
 
 image: python:3.12-slim
 
 before_script:
   - apt-get update -qq && apt-get install -y git
-  - python -m venv venv
-  - source venv/bin/activate
+  - python -m venv .venv
+  - .venv/bin/activate
   - pip install --upgrade pip
   - pip install -r requirements.txt -r requirements-dev.txt
+
+.rules: &rules
+  - if: $CI_PIPELINE_SOURCE == "push"
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
 lint:
   stage: lint
@@ -27,14 +31,16 @@ lint:
     - black --check .
     - flake8 .
     - mypy .
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "push"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  rules: *rules
 
 tests:
   stage: test
   script:
-    - pytest
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "push"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - pytest tests/ -v --cov=app --cov-report=xml:coverage.xml --junitxml=pytest.xml
+  artifacts:
+    reports:
+      junit: pytest.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+  rules: *rules
