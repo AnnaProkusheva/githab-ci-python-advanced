@@ -10,6 +10,10 @@ before_script:
   - pip install -r requirements.txt
   - pip install pytest-cov
 
+.rules: &rules
+  - if: $CI_PIPELINE_SOURCE == "push"
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
 lint:
   stage: lint
   script:
@@ -17,8 +21,10 @@ lint:
     - black --check .
     - flake8 .
     - mypy .
+  rules: *rules
 
 tests:
   stage: test
   script:
     - pytest --cov=app --cov-report=xml:coverage.xml
+  rules: *rules
