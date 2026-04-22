@@ -8,7 +8,7 @@ from app.models import ClientParking
 
 @pytest.mark.unit
 class TestClientParkingModel:
-    @patch.object(ClientParking, 'time_in', datetime.utcnow())
+    @patch.object(ClientParking, "time_in", datetime.utcnow())
     def test_session_time_in_default(self):
         session = ClientParking(client_id=1, parking_id=1)
         assert session.time_in is not None

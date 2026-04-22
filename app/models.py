@@ -4,7 +4,7 @@ from app import db
 
 
 class Client(db.Model):
-    __tablename__ = 'client'
+    __tablename__ = "client"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
@@ -12,11 +12,11 @@ class Client(db.Model):
     credit_card = db.Column(db.String(50))
     car_number = db.Column(db.String(10))
 
-    parking_sessions = db.relationship('ClientParking', backref='client', lazy=True)
+    parking_sessions = db.relationship("ClientParking", backref="client", lazy=True)
 
 
 class Parking(db.Model):
-    __tablename__ = 'parking'
+    __tablename__ = "parking"
 
     id = db.Column(db.Integer, primary_key=True)
     address = db.Column(db.String(100), nullable=False)
@@ -24,18 +24,18 @@ class Parking(db.Model):
     count_places = db.Column(db.Integer, nullable=False)
     count_available_places = db.Column(db.Integer, nullable=False)
 
-    parking_sessions = db.relationship('ClientParking', backref='parking', lazy=True)
+    parking_sessions = db.relationship("ClientParking", backref="parking", lazy=True)
 
 
 class ClientParking(db.Model):
-    __tablename__ = 'client_parking'
+    __tablename__ = "client_parking"
 
     id = db.Column(db.Integer, primary_key=True)
-    client_id = db.Column(db.Integer, db.ForeignKey('client.id'), nullable=False)
-    parking_id = db.Column(db.Integer, db.ForeignKey('parking.id'), nullable=False)
+    client_id = db.Column(db.Integer, db.ForeignKey("client.id"), nullable=False)
+    parking_id = db.Column(db.Integer, db.ForeignKey("parking.id"), nullable=False)
     time_in = db.Column(db.DateTime, default=datetime.utcnow)
     time_out = db.Column(db.DateTime)
 
     __table_args__ = (
-        db.UniqueConstraint('client_id', 'parking_id', name='unique_client_parking'),
+        db.UniqueConstraint("client_id", "parking_id", name="unique_client_parking"),
     )

@@ -103,7 +103,10 @@ def client_enter_parking():
     ).first():
         return jsonify({"error": "Client already parked"}), 400
 
-    session = ClientParking(client_id=data["client_id"], parking_id=data["parking_id"])
+    session = ClientParking(
+        client_id=data["client_id"],
+        parking_id=data["parking_id"],
+    )
     db.session.add(session)
     parking.count_available_places -= 1
     db.session.commit()
