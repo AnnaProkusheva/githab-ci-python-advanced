@@ -6,3 +6,4 @@ isort
 flake8
 mypy
 httpx
+pytest-asyncio
