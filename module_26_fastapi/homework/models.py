@@ -1,3 +1,5 @@
+from typing import Any
+
 from sqlalchemy import Column, Integer, String, Text
 
 from database import Base
@@ -11,4 +13,4 @@ class Recipe(Base):
     cooking_time = Column(Integer, nullable=False)
     ingredients = Column(String, nullable=False)
     description = Column(Text, nullable=False)
-    views = Column(Integer, default=0)  # type: ignore[assignment]
+    views: Any = Column(Integer, default=0)
