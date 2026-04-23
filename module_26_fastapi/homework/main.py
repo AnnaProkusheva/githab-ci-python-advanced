@@ -1,6 +1,7 @@
-from typing import List
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, HTTPException, Depends
+from typing import List
+
+from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -9,10 +10,8 @@ import schemas
 from database import engine, get_db
 
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-
     async with engine.begin() as conn:
         await conn.run_sync(models.Base.metadata.create_all)
     yield
@@ -20,8 +19,11 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Cookbook API", lifespan=lifespan)
 
+
 @app.post("/recipes", response_model=schemas.RecipeDetail, status_code=201)
-async def create_recipe(recipe: schemas.RecipeCreate, db: AsyncSession = Depends(get_db)):
+async def create_recipe(
+    recipe: schemas.RecipeCreate, db: AsyncSession = Depends(get_db)
+):
     new_recipe = models.Recipe(**recipe.model_dump())
     db.add(new_recipe)
     await db.commit()
@@ -32,12 +34,10 @@ async def create_recipe(recipe: schemas.RecipeCreate, db: AsyncSession = Depends
 @app.get("/recipes", response_model=List[schemas.RecipeListItem])
 async def get_recipes_list(db: AsyncSession = Depends(get_db)):
     stmt = select(models.Recipe).order_by(
-        models.Recipe.views.desc(),
-        models.Recipe.cooking_time.asc()
+        models.Recipe.views.desc(), models.Recipe.cooking_time.asc()
     )
     result = await db.execute(stmt)
-    recipes = result.scalars().all()
-    return recipes
+    return result.scalars().all()
 
 
 @app.get("/recipes/{recipe_id}", response_model=schemas.RecipeDetail)
@@ -46,13 +46,12 @@ async def get_recipe_detail(recipe_id: int, db: AsyncSession = Depends(get_db)):
     result = await db.execute(stmt)
     recipe = result.scalar_one_or_none()
 
-    if not recipe:
+    if recipe is None:
         raise HTTPException(status_code=404, detail="Рецепт не найден")
 
     recipe.views += 1
     await db.commit()
     await db.refresh(recipe)
-
     return recipe
 
 

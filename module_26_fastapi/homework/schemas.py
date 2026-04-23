@@ -1,12 +1,19 @@
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class RecipeCreate(BaseModel):
     name: str = Field(..., description="Название блюда", examples=["Оливье"])
-    cooking_time: int = Field(..., description="Время приготовления в минутах", examples=[30])
-    ingredients: str = Field(..., description="Список ингредиентов через запятую",
-                             examples=["Яйца, Майонез, Картофель"])
-    description: str = Field(..., description="Описание процесса приготовления", examples=["Сварить овощи..."])
+    cooking_time: int = Field(
+        ..., description="Время приготовления в минутах", examples=[30]
+    )
+    ingredients: str = Field(
+        ...,
+        description="Список ингредиентов через запятую",
+        examples=["Яйца, Майонез, Картофель"],
+    )
+    description: str = Field(
+        ..., description="Описание процесса приготовления", examples=["Сварить овощи..."]
+    )
 
 
 class RecipeListItem(BaseModel):
