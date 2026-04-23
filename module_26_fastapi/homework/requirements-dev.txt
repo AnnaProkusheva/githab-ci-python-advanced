@@ -1,1 +1,8 @@
+-r requirements.txt
+pytest
 pytest-cov==5.0.0
+black
+isort
+flake8
+mypy
+httpx

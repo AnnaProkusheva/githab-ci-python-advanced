@@ -11,4 +11,4 @@ class Recipe(Base):
     cooking_time = Column(Integer, nullable=False)
     ingredients = Column(String, nullable=False)
     description = Column(Text, nullable=False)
-    views = Column(Integer, default=0)
+    views = Column(Integer, default=0)  # type: ignore[assignment]
