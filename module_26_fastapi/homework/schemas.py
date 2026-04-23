@@ -12,7 +12,9 @@ class RecipeCreate(BaseModel):
         examples=["Яйца, Майонез, Картофель"],
     )
     description: str = Field(
-        ..., description="Описание процесса приготовления", examples=["Сварить овощи..."]
+        ...,
+        description="Описание процесса приготовления",
+        examples=["Сварить овощи..."],
     )
 
 
