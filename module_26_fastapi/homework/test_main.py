@@ -14,7 +14,7 @@ models.Base.metadata.bind = engine
 
 
 @pytest.fixture(scope="function")
-async def db_session():
+async def db_session() -> AsyncSession:
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
@@ -26,19 +26,21 @@ async def db_session():
 
 
 @pytest.fixture(scope="function")
-async def client(db_session: AsyncSession):
+async def client(db_session: AsyncSession) -> AsyncClient:
     async def override_get_db():
         yield db_session
 
     app.dependency_overrides[get_db] = override_get_db
     transport = ASGITransport(app=app)
+
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
         yield ac
+
     app.dependency_overrides.clear()
 
 
 @pytest.mark.asyncio
-async def test_create_recipe(client: AsyncClient):
+async def test_create_recipe(client: AsyncClient) -> None:
     response = await client.post(
         "/recipes",
         json={
@@ -55,7 +57,7 @@ async def test_create_recipe(client: AsyncClient):
 
 
 @pytest.mark.asyncio
-async def test_get_recipes_list(client: AsyncClient):
+async def test_get_recipes_list(client: AsyncClient) -> None:
     await client.post(
         "/recipes",
         json={"name": "А", "cooking_time": 10, "ingredients": "a", "description": "a"},
@@ -71,7 +73,7 @@ async def test_get_recipes_list(client: AsyncClient):
 
 
 @pytest.mark.asyncio
-async def test_get_recipe_detail_and_views(client: AsyncClient):
+async def test_get_recipe_detail_and_views(client: AsyncClient) -> None:
     create_resp = await client.post(
         "/recipes",
         json={
@@ -92,6 +94,6 @@ async def test_get_recipe_detail_and_views(client: AsyncClient):
 
 
 @pytest.mark.asyncio
-async def test_get_nonexistent_recipe(client: AsyncClient):
+async def test_get_nonexistent_recipe(client: AsyncClient) -> None:
     response = await client.get("/recipes/999")
     assert response.status_code == 404
